@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from graph import build_graph
+from topic_generator import generate_topic
 
 def main():
     load_dotenv()
@@ -13,9 +14,25 @@ def main():
     
     app = build_graph()
     
-    topic = input("Enter the research topic (e.g., 'Catenary curves in architecture'): ")
-    if not topic:
-        topic = "Catenary curves in architecture"
+    while True:
+        print("\n--- Topic Generation Setup ---")
+        career_path = input("Enter your desired Career Path (e.g., 'Computer Scientist', 'Architect'): ")
+        curriculum = input("Enter your desired Curriculum/Subject (e.g., 'Linear Algebra', 'Calculus'): ")
+        
+        if not career_path or not curriculum:
+            print("Both fields are required. Please try again.")
+            continue
+            
+        print("Generating optimal research topic...")
+        topic = generate_topic(career_path, curriculum)
+        
+        print(f"\nProposed Topic: {topic}")
+        confirm = input("Do you like this topic? (y/n): ").strip().lower()
+        
+        if confirm == 'y':
+            break
+        else:
+            print("Let's try again with different inputs.")
     
     initial_state = {
         "topic": topic,
@@ -25,21 +42,22 @@ def main():
     }
     
     print("Starting Research Mate Report AI...")
+    final_state = initial_state.copy()
+    
     for output in app.stream(initial_state):
         for key, value in output.items():
             print(f"Finished Node: {key}")
+            final_state.update(value)
             
     # Print Final Report
-    # Ideally, we would retrieve the final state, but stream yields updates.
-    # We'll just grab the state at the end if we were running invoke, 
-    # but with stream, we need to track it or just trust the file system artifacts if we saved them.
-    # Let's run invoke for simplicity in getting the final state return.
-    
-    final_state = app.invoke(initial_state)
     report = final_state.get("final_report")
     
-    with open("report_output.md", "w") as f:
-        f.write(report)
+    if report:
+        with open("report_output.md", "w") as f:
+            f.write(report)
+    else:
+        print("Error: No report generated.")
+
         
     print("\n\nReport generated successfully: report_output.md")
 

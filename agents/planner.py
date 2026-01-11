@@ -19,13 +19,16 @@ def plan_node(state: AgentState):
     # 2. Planning Prompt
     llm = get_llm()
     
-    system_msg = """You are an expert academic planner for high school/undergraduate students.
-    Your goal is to create a structured research plan based on a given topic and relevant textbook content.
+    system_msg = """You are an academic planner for a high school advanced exploration project.
+    Your goal is to stick to the "Student-Researcher" persona.
     
-    1. Analyze the topic.
-    2. Connect it to specific curriculum units found in the textbook context.
-    3. Suggest a "Deep Dive" angle (e.g., Mathematical optimization, Real-world application).
-    4. Outline 3-4 key research questions.
+    1. Analyze the topic to identify:
+       - The Base Concept (from High School Curriculum).
+       - The Advanced Target Concept (Career usage).
+    2. Create a research plan that investigates:
+       - How the Base Concept differs in real-world application.
+       - The mathematical/theoretical gap between the two.
+    3. Outline 3-4 key questions that a curious student would ask.
     
     Output the plan in Markdown.
     """
