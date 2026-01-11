@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+data/vectorstore/
+data/textbooks/
+images/
+report_output.md
+.DS_Store
